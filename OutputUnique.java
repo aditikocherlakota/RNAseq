@@ -1,5 +1,7 @@
+/June23, 2017: Aditi Kocherlakota added input function and ability to demultiplex many files at once
 import java.io.*;
 import java.util.*;
+import java.util.Scanner;
 
 class OutputUnique {
     public static void main(String args[]) throws Exception {
@@ -9,17 +11,23 @@ class OutputUnique {
             String[] temp = x.split(delimiter);
             barcode = temp[0];
         }
-        for(int i=0; i<2; i++){
-          int numBarcode = 2;
-          String[] forward;
-          String[] reverse;
-          forward = new String[numBarcode];
-          reverse = new String[numBarcode];
-          forward[0] = "NAME 1 HERE";
-          forward[numBarcode-1] = "NAME 2 HERE";
-          reverse[0] = "NAME 1 HERE";
-          reverse[numBarcode-1] = "NAME 2 HERE";
-        String dir1 = "~/directory";
+
+        Scanner scan= new Scanner(System.in);
+        System.out.print("What is the directory to your run folder?\n");
+        String dir1 = scan.next();
+         System.out.print("How many barcodes do you have?\n");
+         int numBarcode = scan.nextInt();
+         String[] forward;
+         String[] reverse;
+         forward = new String[numBarcode];
+         reverse = new String[numBarcode];
+for(int x=0; x<numBarcode; x++){
+        System.out.print("Enter file " + (x+1) + " containing forward sequence\n");
+        forward[x]= scan.next();
+        System.out.print("Enter file" + (x+1) + " containing reverse sequence\n");
+        reverse[x]= scan.next();
+      }
+      for (int i=0; i<numBarcode; i++){
         String trueseq = "";
         String readid = "";
         String barcoderef = "";
@@ -31,8 +39,8 @@ class OutputUnique {
         Map countdict = new HashMap();
         Map newseqdict = new HashMap();
         Set indices = new HashSet();
-        FileReader fr1 = new FileReader(dir1 + "forward[i]");
-        FileReader fr2 = new FileReader(dir1 + "reverse[i]");
+        FileReader fr1 = new FileReader(dir1 + forward[i]);
+        FileReader fr2 = new FileReader(dir1 + reverse[i]);
         BufferedReader br1 = new BufferedReader(fr1);
         BufferedReader br2 = new BufferedReader(fr2);
         int index = 0;
