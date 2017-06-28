@@ -15,7 +15,7 @@ class OutputUnique {
         Scanner scan= new Scanner(System.in);
         System.out.print("what is the directory to your run folder?\n");
         String dir1 = scan.next();
-        System.out.print("ensure that you have a .txt file with a list of your at is the name of your forward text file?\n");
+        System.out.print("ensure that you have a two .txt files: /none for your front end reads in order and one for your reverse ends in the same order./n what is the name of your front read text file?\n");
         String textForward = scan.next();
         System.out.print("what is the name of your reverse text file\n");
         String textReverse = scan.next();
