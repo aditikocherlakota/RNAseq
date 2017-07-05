@@ -1,3 +1,4 @@
+//aditi kocherlakota corrected barcode scanner 7/05/17
 import java.io.*;
 import java.util.*;
 import java.util.Scanner;
@@ -8,19 +9,21 @@ class OutputUnique {
         for (String x: args) {
             String delimiter = " ";
             String[] temp = x.split(delimiter);
-            barcode = temp[0];
-            }
-
+        }
 
         Scanner scan= new Scanner(System.in);
-        System.out.print("what is the directory to your run folder?\n");
-        String dir1 = scan.next();
-        System.out.print("ensure that you have a two .txt files: \n one for your front end reads in order and one for your reverse ends in the same order. \n what is the name of your front read text file?\n");
-        String textForward = scan.next();
-        System.out.print("what is the name of your reverse text file\n");
-        String textReverse = scan.next();
-        System.out.print("how many barcodes do you have?\n");
-        int numBarcode = scan.nextInt();
+         System.out.print("what is the directory to your run folder?\n");
+         String dir1 = scan.next();
+         System.out.print("What is the name of your forward file?\n");
+         String forward = scan.next();
+          System.out.print("What is the name of your reverse file?\n");
+         String reverse = scan.next();
+           System.out.print("What would you like to label your demultiplexed files with?\n");
+           String label = scan.next();
+           System.out.print("What is the name of your .txt file with your barcodes?\n");
+           String barcodeName = scan.next();
+           System.out.print("how many barcodes do you have?\n");
+       int numBarcode = scan.nextInt();
         String trueseq = "";
         String readid = "";
         String barcoderef = "";
@@ -32,28 +35,24 @@ class OutputUnique {
         Map countdict = new HashMap();
         Map newseqdict = new HashMap();
         Set indices = new HashSet();
-        String[] forward;
-        String[] reverse;
-        forward = new String[numBarcode];
-        reverse = new String[numBarcode];
-        File forwardSeq = new File(textForward);
-        File reverseSeq = new File(textReverse);
-        Scanner scFor = new Scanner (forwardSeq);
-        Scanner scRev = new Scanner (reverseSeq);
+        String[] barcodeList;
+        barcodeList = new String[numBarcode];
+        File barFile = new File(barcodeName);
+        Scanner scBar = new Scanner (barFile);
           for(int i=0; i<numBarcode; i++)
           {
-            forward[i] = scFor.nextLine();
-            reverse[i] = scRev.nextLine();
+            barcodeList[i] = scBar.nextLine();
           }
-          for (int x=0; x<numBarcode; x++){
-        FileReader fr1 = new FileReader(dir1 + forward[x]);
-        FileReader fr2 = new FileReader(dir1 + reverse[x]);
+        FileReader fr1 = new FileReader(dir1 + forward);
+        FileReader fr2 = new FileReader(dir1 + reverse);
         BufferedReader br1 = new BufferedReader(fr1);
         BufferedReader br2 = new BufferedReader(fr2);
         int index = 0;
         int position = 0;
         int counter=0;
         int thresh = 75;
+        for (int d=0; d<numBarcode; d++)
+        {
         while(true) {
             String s1 = br1.readLine();
             String s2 = br2.readLine();
@@ -81,7 +80,7 @@ class OutputUnique {
             if (s2.length() > thresh)
                 {
                  qual = s2.substring(5,thresh);
-                if (barcoderef.equals(barcode))
+                if (barcoderef.equals(barcodeList[d]))
                     {
                      newseqdict.put(read, readid + "\n" + trueseq.substring(5,thresh) + "\n" + "+" + "\n" + qual + "\n");
                     }
@@ -89,9 +88,7 @@ class OutputUnique {
             }
            counter = counter + 1;
         }
-fr1.close();
-fr2.close();
-FileWriter f0 = new FileWriter(dir1 + forward[x] + barcode + "_nodupe_trimmed.fastq");
+FileWriter f0 = new FileWriter(dir1 + label + barcodeList[d] + "_nodupe_trimmed.fastq");
 Set entries = newseqdict.entrySet();
 Iterator iterator = entries.iterator();
 while(iterator.hasNext()) {
@@ -101,5 +98,7 @@ while(iterator.hasNext()) {
 }
 f0.close();
 }
+fr1.close();
+fr2.close();
 }
 }
